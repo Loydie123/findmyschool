@@ -1,0 +1,90 @@
+find-my-school/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── scholarships/
+│   │   ├── page.tsx               # Scholarships listing page
+│   │   └── [id]/
+│   │       └── page.tsx           # Scholarship detail view
+│   ├── admin/
+│   │   ├── layout.tsx
+│   │   └── scholarships/
+│   │       ├── page.tsx           # Manage scholarships
+│   │       └── new/
+│   │           └── page.tsx       # Add scholarship form
+│   ├── submit/
+│   │   └── page.tsx               # Public submission page
+│   └── api/
+│       └── scholarships/
+│           ├── route.ts          # POST/GET scholarships
+│           └── [id]/
+│               └── route.ts      # GET/PATCH/DELETE by ID
+│
+├── components/
+│   ├── ui/                       # shadcn/ui components
+│   ├── scholarship-card.tsx     # Component for scholarship preview
+│   ├── search-filter.tsx        # Filter/search bar UI
+│   └── layout-navbar.tsx        # Header/nav layout
+│
+├── lib/
+│   ├── db.ts                    # Supabase/Appwrite client
+│   ├── utils.ts                 # Helper functions
+│   └── validators.ts            # Zod schema validators
+│
+├── services/
+│   └── scholarship.service.ts   # Business logic (CRUD ops)
+│
+├── constants/
+│   └── filters.ts               # Scholarship types, regions, etc.
+│
+├── types/
+│   └── index.ts                 # TypeScript types (Scholarship, User)
+│
+├── public/
+│   └── logo.png
+│
+├── styles/
+│   └── globals.css              # Tailwind base styles
+│
+├── .env.local                   # Supabase URL & API keys
+├── tailwind.config.ts
+├── next.config.js
+└── package.json
+
+
+Frontend: Next.js (App Router) + Tailwind CSS + shadcn/ui
+
+Backend: Appwrite or Supabase (user auth + database)
+
+Optional AI: Chatbot to answer scholarship FAQs
+
+Admin Panel: Manage listings, submissions, and user roles
+
+
+Area	Features
+🔍 Search & Filter	Filter by school, region, course, income bracket, scholarship type (e.g., full/partial/allowance only)
+📝 Add Scholarship	Admin form for verified partners or users to submit listings
+✅ Verified Badge	For DOST, CHED, LGU, and private orgs to show legit listings
+📅 Deadline Tracker	Highlights scholarships with open/closing dates
+📚 Scholar Stories	Section for testimonials from real recipients
+💬 Chat Support	Chatbot for “How to apply?”, “What is need-based?”, etc.
+
+
+🗂️ Suggested Database Schema (Supabase or Appwrite)
+Tables:
+
+scholarships
+
+id, name, type, provider, location, course_eligibility, income_requirement, deadline, link, verified
+
+users
+
+id, name, email, role (student/admin/provider)
+
+submissions
+
+id, user_id, scholarship_id, status, date_submitted
+
+testimonials
+
+id, user_id, quote, school, year
