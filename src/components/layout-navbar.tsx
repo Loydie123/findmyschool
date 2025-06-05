@@ -7,12 +7,6 @@ import { AuthButtons } from '@/components/auth/auth-buttons';
 import { AnimatedMenu } from '@/components/ui/animated-menu';
 import { BurgerButton } from '@/components/ui/burger-button';
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Schools', href: '/schools' },
-  { name: 'Scholarships', href: '/scholarships' },
-];
-
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

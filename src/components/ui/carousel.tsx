@@ -10,8 +10,6 @@ interface CarouselProps {
   autoPlayInterval?: number;
   className?: string;
   imageHeight?: string;
-  showControls?: boolean;
-  showIndicators?: boolean;
 }
 
 export function Carousel({
@@ -19,8 +17,6 @@ export function Carousel({
   autoPlayInterval = 4500,
   className = "",
   imageHeight = "h-[500px]",
-  showControls = false,
-  showIndicators = false,
 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);

@@ -102,7 +102,7 @@ export function Features({
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {features.map((feature, index) => {
+          {features.map((feature) => {
             const colors = gradientClasses[feature.gradient.from as keyof typeof gradientClasses];
             
             return (
