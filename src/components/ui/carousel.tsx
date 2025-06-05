@@ -183,6 +183,46 @@ export function Carousel({
             </motion.div>
           </motion.div>
         </AnimatePresence>
+
+        {showControls && (
+          <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
+            <button
+              onClick={() => {
+                setDirection(-1);
+                setCurrentIndex((current) => (current - 1 + items.length) % items.length);
+              }}
+              className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
+            >
+              ←
+            </button>
+            <button
+              onClick={() => {
+                setDirection(1);
+                setCurrentIndex((current) => (current + 1) % items.length);
+              }}
+              className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
+            >
+              →
+            </button>
+          </div>
+        )}
+
+        {showIndicators && (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+            {items.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setDirection(index > currentIndex ? 1 : -1);
+                  setCurrentIndex(index);
+                }}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentIndex ? 'bg-white' : 'bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
