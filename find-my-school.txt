@@ -88,3 +88,6 @@ id, user_id, scholarship_id, status, date_submitted
 testimonials
 
 id, user_id, quote, school, year
+
+
+npm install @supabase/ssr @supabase/supabase-js

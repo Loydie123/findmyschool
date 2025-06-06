@@ -24,4 +24,4 @@ export default function Home() {
       </Suspense>
     </LandingLayout>
   );
-}
+} 

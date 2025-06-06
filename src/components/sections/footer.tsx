@@ -16,7 +16,7 @@ export function Footer() {
         >
           <span className="select-none">© {currentYear}</span>
           <span className="select-none">FindMySchool</span>
-          <span className="select-none">• All rights reserved</span>
+          <span className="select-none">• All rights reserved. LoydDev</span>
         </motion.div>
       </div>
     </footer>
