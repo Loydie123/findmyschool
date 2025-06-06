@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -61,7 +62,10 @@ const navigationItems = [
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
   const pathname = usePathname();
+  const supabase = createClientComponentClient();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -77,9 +81,44 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session && !pathname?.startsWith('/admin/login')) {
+          router.replace('/admin/login');
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkUser();
+  }, [pathname, router, supabase.auth]);
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+
+  if (isLoading) {
+    return null;
+  }
+
+
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-500 ease-in-out ${isExpanded ? 'w-64' : 'w-20'}`}>
+      <div className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-500 ease-in-out flex flex-col ${isExpanded ? 'w-64' : 'w-20'}`}>
         <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
           <button
             onClick={() => !isMobile && setIsExpanded(!isExpanded)}
@@ -98,7 +137,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </button>
         </div>
 
-        <nav className="p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1">
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
             
@@ -148,6 +187,38 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             );
           })}
         </nav>
+
+
+        <div className="p-4">
+          <button
+            onClick={handleLogout}
+            className={`flex items-center ${isExpanded ? 'px-4' : 'px-3'} py-2 w-full text-sm font-medium rounded-md transition-all duration-500 ease-in-out group relative text-red-600 hover:bg-red-50`}
+          >
+            <span className={`transition-all duration-500 ease-in-out transform ${isExpanded ? 'mr-3' : 'mx-auto'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+            </span>
+            <AnimatePresence mode="wait">
+              {isExpanded && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="whitespace-nowrap"
+                >
+                  Logout
+                </motion.span>
+              )}
+            </AnimatePresence>
+            {!isExpanded && (
+              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-50">
+                Logout
+              </div>
+            )}
+          </button>
+        </div>
       </div>
 
       <div className={`flex flex-col min-h-screen ${isExpanded ? 'lg:pl-64' : 'pl-20'} transition-all duration-500 ease-in-out`}>
