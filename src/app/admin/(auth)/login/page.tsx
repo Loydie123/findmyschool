@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
+import AdminLoading from "../../loading";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,14 +30,19 @@ export default function AdminLogin() {
         throw error;
       }
 
-      router.push("/admin");
+      setIsRedirecting(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      router.replace('/admin');
       router.refresh();
     } catch (error: any) {
       setError(error.message || "An error occurred during login");
-    } finally {
       setIsLoading(false);
     }
   };
+
+  if (isRedirecting) {
+    return <AdminLoading />;
+  }
 
   return (
     <div className="min-h-screen flex items-start pt-8 sm:pt-20 justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
@@ -57,7 +64,7 @@ export default function AdminLogin() {
           </p>
         </div>
         
-        <form onSubmit={handleLogin} className="mt-6 space-y-4">
+        <form method="POST" onSubmit={handleLogin} className="mt-6 space-y-4">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email" className="sr-only">

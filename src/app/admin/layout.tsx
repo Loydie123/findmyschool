@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { usePathname } from 'next/navigation';
 import { AdminNavbar } from './components/navbar';
 import { AdminHeader } from './components/header';
 
@@ -13,10 +12,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const router = useRouter();
   const pathname = usePathname();
-  const supabase = createClientComponentClient();
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,25 +28,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!session && !pathname?.startsWith('/admin/login')) {
-          router.replace('/admin/login');
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkUser();
-  }, [pathname, router, supabase.auth]);
-
-  if (isLoading) {
-    return null;
-  }
 
   if (pathname === '/admin/login') {
     return <>{children}</>;

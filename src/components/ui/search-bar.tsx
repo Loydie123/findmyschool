@@ -21,7 +21,6 @@ export function SearchBar({
   const [searchTerm, setSearchTerm] = useState(defaultValue || searchParams.get('search') || '');
   const [isTyping, setIsTyping] = useState(false);
 
-
   useEffect(() => {
     if (isTyping) {
       const timeout = setTimeout(() => setIsTyping(false), 1000);
@@ -45,9 +44,8 @@ export function SearchBar({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`relative group ${className}`}>
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-      <div className="relative flex items-center bg-white rounded-lg shadow-lg">
+    <form onSubmit={handleSubmit} className={`relative ${className}`}>
+      <div className="flex items-center bg-white rounded-lg shadow-md border border-gray-200">
         <input
           type="search"
           value={searchTerm}
@@ -61,7 +59,7 @@ export function SearchBar({
           disabled={!searchTerm.trim()}
           className={`select-none px-6 py-3 m-1 text-sm font-semibold text-white rounded-md transition-all flex items-center gap-2 ${
             searchTerm.trim() 
-              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90' 
+              ? 'bg-blue-600 hover:bg-blue-700' 
               : 'bg-gray-300 cursor-not-allowed'
           }`}
         >
