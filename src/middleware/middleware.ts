@@ -1,4 +1,4 @@
-import { authMiddleware } from './middleware/auth';
+import { authMiddleware } from './auth';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
