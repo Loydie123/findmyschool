@@ -23,7 +23,7 @@ export function Navbar() {
     <header className="fixed top-0 w-full z-50 px-4">
       <nav className={`mx-auto max-w-7xl transition-all duration-300 ${
         isScrolled 
-          ? 'mt-1 md:mt-2 bg-white/80 backdrop-blur-md shadow-lg rounded-full border border-gray-200/20' 
+          ? 'mt-1 md:mt-2 bg-white/80 backdrop-blur-md shadow-lg rounded-full' 
           : 'mt-2 md:mt-4'
       }`}>
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">

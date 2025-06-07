@@ -9,152 +9,132 @@ interface PageTransitionProps {
   animation?: 'fade' | 'slide' | 'scale' | 'rotate' | 'flip';
 }
 
-const easings = {
-  smooth: [0.22, 1, 0.36, 1],
-  bounce: [0.68, -0.6, 0.32, 1.6],
-  spring: [0.43, 0.13, 0.23, 0.96]
+const springTransition = {
+  type: "spring",
+  mass: 0.2,
+  damping: 15,
+  stiffness: 150,
+  restDelta: 0.001
 };
 
+const easeTransition = {
+  type: "tween",
+  duration: 0.5,
+  ease: [0.25, 0.1, 0.25, 1]
+};
 
 const animationVariants = {
   fade: {
     initial: {
       opacity: 0,
-      y: 20,
+      y: 15,
     },
     animate: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: easings.smooth,
+        ...springTransition,
         staggerChildren: 0.1,
-      },
+        delayChildren: 0.1
+      }
     },
     exit: {
       opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.4,
-        ease: easings.smooth,
-      },
+      transition: easeTransition
     },
   },
   slide: {
     initial: {
       opacity: 0,
-      x: -60,
+      x: -15,
     },
     animate: {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.7,
-        ease: easings.spring,
+        ...springTransition,
         staggerChildren: 0.1,
-      },
+        delayChildren: 0.1
+      }
     },
     exit: {
       opacity: 0,
-      x: 60,
-      transition: {
-        duration: 0.5,
-        ease: easings.spring,
-      },
+      x: 15,
+      transition: easeTransition
     },
   },
   scale: {
     initial: {
       opacity: 0,
-      scale: 0.95,
+      scale: 0.98,
     },
     animate: {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.5,
-        ease: easings.spring,
+        ...springTransition,
         staggerChildren: 0.1,
-      },
+        delayChildren: 0.1
+      }
     },
     exit: {
       opacity: 0,
-      scale: 1.05,
-      transition: {
-        duration: 0.4,
-        ease: easings.spring,
-      },
+      scale: 0.98,
+      transition: easeTransition
     },
   },
   rotate: {
     initial: {
       opacity: 0,
-      rotateX: -10,
-      y: 40,
+      y: 15,
     },
     animate: {
       opacity: 1,
-      rotateX: 0,
       y: 0,
       transition: {
-        duration: 0.8,
-        ease: easings.smooth,
+        ...springTransition,
         staggerChildren: 0.1,
-      },
+        delayChildren: 0.1
+      }
     },
     exit: {
       opacity: 0,
-      rotateX: 10,
-      y: -40,
-      transition: {
-        duration: 0.6,
-        ease: easings.smooth,
-      },
+      y: -15,
+      transition: easeTransition
     },
   },
   flip: {
     initial: {
       opacity: 0,
-      rotateY: -20,
-      scale: 0.95,
+      scale: 0.98,
     },
     animate: {
       opacity: 1,
-      rotateY: 0,
       scale: 1,
       transition: {
-        duration: 0.8,
-        ease: easings.bounce,
+        ...springTransition,
         staggerChildren: 0.1,
-      },
+        delayChildren: 0.1
+      }
     },
     exit: {
       opacity: 0,
-      rotateY: 20,
-      scale: 0.95,
-      transition: {
-        duration: 0.6,
-        ease: easings.bounce,
-      },
+      scale: 0.98,
+      transition: easeTransition
     },
   },
 };
 
-const sectionVariants = {
+const childVariants = {
   initial: {
     opacity: 0,
-    y: 30,
-    scale: 0.97,
+    y: 15,
   },
   animate: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.8,
-      ease: easings.spring,
-    },
-  },
+    transition: springTransition
+  }
 };
 
 export function PageTransition({ 
@@ -164,7 +144,7 @@ export function PageTransition({
 }: PageTransitionProps) {
   return (
     <motion.div
-      className={`${className} [perspective:1000px]`}
+      className={`${className}`}
       initial="initial"
       animate="animate"
       exit="exit"
@@ -174,19 +154,13 @@ export function PageTransition({
         children.map((child, index) => (
           <motion.div
             key={index}
-            variants={sectionVariants}
-            custom={index}
-            transition={{
-              delay: index * 0.2,
-              duration: 0.8,
-              ease: easings.spring,
-            }}
+            variants={childVariants}
           >
             {child}
           </motion.div>
         ))
       ) : (
-        <motion.div variants={sectionVariants}>{children}</motion.div>
+        <motion.div variants={childVariants}>{children}</motion.div>
       )}
     </motion.div>
   );

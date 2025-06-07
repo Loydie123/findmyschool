@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react';
 import { PageTransition } from '@/components/animations/page-transition';
-import { Footer } from '@/components/sections/footer';
 
 interface LandingLayoutProps {
   children: ReactNode;
@@ -15,7 +14,6 @@ export function LandingLayout({ children, className = "" }: LandingLayoutProps) 
       <main className="flex-grow">
         {children}
       </main>
-      <Footer />
     </PageTransition>
   );
 } 
